@@ -22,5 +22,4 @@ class Coche(Vehiculo):
         return "color {}, {} km/h, {} ruedas, {} puertas, {} cc".format( self.color, self.velocidad, self.ruedas, self.puertas, self.cilindrada )
 
 coche=Coche("Rojo",4,5,250,2.0)
-#coche = Coche("azul", 4, 4, 150, 1200)
 print(coche)
