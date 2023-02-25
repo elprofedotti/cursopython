@@ -1,4 +1,6 @@
 class Alumno():
+    _nombre=""
+    _nota=0
     
     def __str__(self):
         return "ALumno: {}, su nota es {}".format( self._nombre, self._nota )
