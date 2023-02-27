@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}<title>Detalle de la pelicula {{ pelicula.nombre }}</title>{% endblock %}
+{% block content %}
+  <h1>Titulo: {{ pelicula.nombre }}</h1>
+  <p><img src="{{pelicula.imagen}}" alt="imagen de la peli" width="300"></p>
+  <p><strong>Director:</strong> <a href="">{{ pelicula.director }}</a></p> <!-- author detail link not yet defined -->
+  <p><strong>Sinopsis:</strong> {{ pelicula.sinopsis }}</p>
+  <p><strong>Duracion:</strong> {{ pelicula.duracion }}</p>
+  <p><strong>Año:</strong> {{pelicula.anyo }}</p>
+
+{% endblock %}
+

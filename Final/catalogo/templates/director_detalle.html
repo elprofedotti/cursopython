@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}<title>Detalle del director {{ director.nombre }}</title>{% endblock %}
+{% block content %}
+  <h1>Director: {{ director.nombre }}</h1>
+  <p><img src="{{director.imagen}}" alt="imagen del dire" width="300"></p>
+  <p><strong>Biografia:</strong> {{ director.biografia }}</p>
+  <p><strong>Fecha nacimiento:</strong> {{ director.fecha_nacimiento }}</p>
+  {%if director.fecha_defuncion %}
+  <p><strong>Fecha defuncion:</strong> {{ director.fecha_defuncion }}</p>
+  {% endif %}
+
+{% endblock %}
+

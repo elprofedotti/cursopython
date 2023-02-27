@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}<title>Lista de Directores</title>{% endblock %}
+{% block content %}
+<h1>Todos los directores</h1>
+
+    {%if object_list %}
+    <ul>
+
+        {% for director in object_list %}
+        <li>
+          <a href="{{ director.id }}">{{ director.nombre }}</a> ({{director.apellidos}})
+        </li>
+        {% endfor %}
+  
+      </ul>
+      {% else %}
+        <p>No hay directores</p>
+      {% endif %}
+
+{% endblock %}
+

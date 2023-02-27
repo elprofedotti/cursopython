@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}<title>Home - Peliculas</title>{% endblock %}
+{% block content %}
+        <h1>Peliculas</h1>
+            <p>Proyecto PELICULAS</p>
+        
+            <p>Tenemos muchas peliculas para ti, de varios directores</p>
+            <ul>
+                <li><strong>Peliculas:</strong> {{ num_pelis }}</li>
+                <li><strong>Directores:</strong> {{ num_dire}}</li>
+                
+                <!-- estos son los que definimos en el render en views.py de la app. -->
+            </ul>
+
+        {% endblock %}

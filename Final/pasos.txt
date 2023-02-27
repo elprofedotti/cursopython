@@ -1,0 +1,180 @@
+me posiciono en la carpeta del proyecto (recordar que los proyectos tienen aplicaciones)
+
+-Creo el proyecto general
+    django-admin startprocect "nombre"
+
+-Creo la app
+    python manaje.py startapp "nombre de la app"
+
+-para correr el servers  
+    python manage.py runserver
+    (esto correra en localhost:8000)
+
+-Agregar dentro de la app el archivo urls.py... (por lo pronto con
+    urlpatterns =[] )
+
+    luego realizar el migrated
+        
+        python manage.py migrated
+        (Esto prepara la BD)
+
+-crear el superusuario (en la carpeta del proyecto general)
+    python manage.py createsuperuser
+
+-Ahora debemos crear los modelos, en el archivo models.py de cada aplicacion (la estructura de la BD)
+    
+       
+
+-Luego de tener el modelo terminado
+    python manage.py makemigrations
+
+    (esto ira generando ficheros dentro de la carpeta de la app, migrations... suelen comenzar
+    con 0001_initial.py)
+
+    luego con migrated, ejecuta en secuencia todo lo que haya en los archivos de la carpeta migrattions
+
+        python manage.py migrate
+
+-ahora hacemos que desde el panel admin, podamos acceder a esos modelos creados...(CRUD)
+    entro a la app... y en el archivo admin.py debemos registrar los modelos
+
+    from .models import --> y los nombres de las tablas generados 
+        tambien puede ser usando el *
+
+    luego, registramos los modelos en el panel de admin
+    debajo, seguimos en el archivo admin.py
+        admin.site.register(nombretabla) //hacerlo por cada tabla    
+    
+    AHORA TIENE QUE APARECER EN LA PAGINA ADMIN, LA APP REGISTRADA
+
+Como hacer para que se VEAN las cosas
+    modifico el urls.py de la app
+    dentro del urlpatterns =[]
+    agrego las urls de las app
+    ejemplo:
+    *************************************************
+    from django.urls import re_path as url
+    from django  import urls
+    from . import views
+
+    urlpatterns =[
+     
+        url(r'^$', views.index,name='index', )
+    ]
+    *************************************************
+    luego implementar esto en el views.py
+    que cuando lo abrimos, aparece asi:
+    ------------------------
+    from django.shortcuts import render
+
+    # Create your views here.
+    -------------------------
+
+    importo las tablas
+    from .models import tablas(separadas por coma)
+
+    y defino la funcino index, que recibe un parametro, la peticion
+    un ejemplo seria:
+    ****************************************************
+    from .models import Author, Genre, Book, BookInstance
+    # Create your views here.
+
+    def index(request):
+        num_books= Book.objects.all().count()
+        num_instances= BookInstance.objects.all().count()
+        num_authors=Author.objects.all().count()
+
+        disponibles = BookInstance.objects.filter(status__exact='a').count()
+    
+        return render(#aca devolvemos)
+            request,
+            'index.html',
+            context={
+                'num_books': num_books,
+                'num_authors': num_authors,
+                'disponibles': disponibles,
+                'num_instances': num_instances
+            }
+        )
+    **********************************************************
+
+    ahora crear todos los html-->crear los template
+        dentro de la app (por ejemplo catalogo), creo la carpeta templates
+        y dentro d esta, genero un archivo base (por ejemplo base_generico.html, o base.html)
+        en este archivo , tenemos rutas esstaticas... {% load static %}
+        estos hay q definirlos en el urls.py del proyecto general... 
+        luego de la finalizacion de patterns... agrego la siguiente linea
+            .....] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+            debere importar:
+                from django.conf import settings
+                from django.conf.urls.static import static
+        
+        ahora si creo el index.html
+            dentro de el indicamos que cargue el fichero base.
+                {% extends "base_generic.html" %} 
+
+        ejemplos de archivo base y del index que lo contiene:
+        ***********************************************************
+        base_generic.html
+        ----------------------------------------------------------------
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            {% block title %}<title>Document</title>{% endblock %}
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>    
+            {% load static %}
+            <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+            
+        </head>
+        <body>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-2">
+                    {% block sidebar %}
+                    <ul class="sidebar-nav">
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        <li><a href="">All books</a></li>
+                        <li><a href="">All authors</a></li>
+                    </ul>
+                    {% endblock %}
+                </div>
+                <div class="col-sm-10">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </body>
+        </html>
+
+
+        **********************************************
+        index.html
+        --------------------------
+        {% extends "base_generic.html" %}
+
+        {% block content %}
+        <h1>Local library home page</h1>
+            <p>papapapapapa</p>
+        <h2>dynamic content</h2>
+            <p>the library has the following record counts:</p>
+            <ul>
+                <li><strong>Books:</strong> {{ num_books }}</li>
+                <li><strong>Copies:</strong> {{ num_instances}}</li>
+                <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
+                <li><strong>Authors:</strong> {{ num_authors }}</li>
+                <!-- estos son los que definimos en el render en views.py de la app. -->
+            </ul>
+
+        {% endblock %}
+        
+
+
+
+
+
+

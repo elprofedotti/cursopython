@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}<title>Lista de peliculas</title>{% endblock %}
+{% block content %}
+<h1>Todas las peliculas</h1>
+
+    {%if object_list %}
+    <ul>
+
+        {% for pelicula in object_list %}
+        <li>
+          <a href="{{pelicula.id}}">{{ pelicula.nombre }}</a> ({{pelicula.sinopsis}})
+        </li>
+        {% endfor %}
+  
+      </ul>
+      {% else %}
+        <p>No hay peliculas</p>
+      {% endif %}
+
+{% endblock %}
+
